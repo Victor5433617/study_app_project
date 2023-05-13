@@ -15,6 +15,10 @@ const routes: Routes = [
     loadChildren: () => import('./edit-user/edit-user.module').then( m => m.EditUserPageModule)
   },
   {
+    path: 'edit-themes/:id',
+    loadChildren: () => import('./edit-themes/edit-themes.module').then( m => m.EditThemesPageModule)
+  },
+  {
     path: '',
     redirectTo: 'home',
     pathMatch: 'full'
