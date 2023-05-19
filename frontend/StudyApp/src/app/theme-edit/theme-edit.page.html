@@ -6,22 +6,24 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true" *ngIf="usuario">
+<ion-content [fullscreen]="true" *ngIf="theme">
   <ion-item>
-    
+    <ion-icon aria-hidden="true" name="person-circle" color="primary"></ion-icon>
     <ion-label class="ion-text-wrap">
-      <h2>Login del Usuario</h2>
+      <h2>Editar Temas</h2>
         <ion-list>
-          <ion-item>   <ion-input label="Email" placeholder="Email" [(ngModel)] = "usuario.email"></ion-input>
+          <ion-item>   <ion-input label="Nombre" placeholder="Nombre" [(ngModel)] = "theme.name"></ion-input>
  
            
            </ion-item>
            
           <ion-item>
-            <ion-input type= "password" label="Password" placeholder="Password" [(ngModel)] = "usuario.password"></ion-input>
+            <ion-input label="Descripcion" placeholder="Descripcion" [(ngModel)] = "theme.description"></ion-input>
             
             </ion-item>
-
+          <ion-item> 
+            <ion-input label="Palabras Clave" placeholder="Palabras Clave"[(ngModel)]= "theme.keywords"></ion-input>
+             </ion-item>
          
 
         </ion-list>
@@ -30,7 +32,7 @@
     </ion-label>
   </ion-item>
   <ion-fab  slot="fixed" vertical="bottom" horizontal="end">
-    <ion-fab-button (click) ="loginUser()">
+    <ion-fab-button (click) ="saveUser()">
       <ion-icon   name="bookmark-outline"></ion-icon>
      
     </ion-fab-button>

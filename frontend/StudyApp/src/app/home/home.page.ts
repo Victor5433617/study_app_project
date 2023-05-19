@@ -1,24 +1,18 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { RefresherCustomEvent } from '@ionic/angular';
-import axios from 'axios';
-import { MessageComponent } from '../message/message.component';
-
 import { DataService, Message } from '../services/data.service';
-import { Router } from '@angular/router';
+import axios from 'axios';
 
 @Component({
   selector: 'app-home',
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
 })
-export class HomePage implements OnInit{
+export class HomePage implements OnInit {
   private data = inject(DataService);
+  temas: any = [];
 
-  usuarios : any = [];
-
-  constructor(private router: Router) {
-    
-  }
+  constructor() {}
 
   refresh(ev: any) {
     setTimeout(() => {
@@ -29,46 +23,25 @@ export class HomePage implements OnInit{
   getMessages(): Message[] {
     return this.data.getMessages();
   }
-  
+
   ionViewWillEnter(): void {
-
-    
-
-     // verificar si es que mi el usuario no esta logeado
-     let token = localStorage.getItem("token");
-
-
-     
-     if(!token){
-       this.router.navigate(["/login"]);
-       return;
-     }
-    this.getUsers();
+    this.getThemes();
   }
 
-  ngOnInit(): void {
-    //this.getUsers();
-  }
+  ngOnInit(): void {}
 
-  getUsers () {
-    let token = localStorage.getItem("token");
-
-    let config ={
-      headers : {
-      "Authorization" : token
-    }
-    }
-    
-    axios.get("http://localhost:3000/users/list", config)
-    .then( result => {
-      if (result.data.success == true) {
-        this.usuarios = result.data.usuarios;
-      } else {
-        console.log(result.data.error);
-      }
-      
-    }).catch(error => {
-      console.log(error.message);
-    })
+  getThemes() {
+    axios
+      .get('http://localhost:3000/themes/list')
+      .then((result) => {
+        if (result.data.success == true) {
+          this.temas = result.data.temas;
+        } else {
+          console.log(result.data.error);
+        }
+      })
+      .catch((error) => {
+        console.log(error.message);
+      });
   }
 }
