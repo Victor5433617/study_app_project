@@ -2,6 +2,7 @@ import { Component, OnInit, inject } from '@angular/core';
 import { RefresherCustomEvent } from '@ionic/angular';
 import { DataService, Message } from '../services/data.service';
 import axios from 'axios';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -11,8 +12,9 @@ import axios from 'axios';
 export class HomePage implements OnInit {
   private data = inject(DataService);
   temas: any = [];
+  usuarios: any = [];
 
-  constructor() {}
+  constructor(private router : Router) {}
 
   refresh(ev: any) {
     setTimeout(() => {
@@ -25,6 +27,18 @@ export class HomePage implements OnInit {
   }
 
   ionViewWillEnter(): void {
+    
+
+     // verificar si es que mi el usuario no esta logeado
+     let token = localStorage.getItem("token");
+
+
+     
+     if(!token){
+       this.router.navigate(["/login"]);
+       return;
+     }
+    this.getUsers();
     this.getThemes();
   }
 
@@ -43,5 +57,27 @@ export class HomePage implements OnInit {
       .catch((error) => {
         console.log(error.message);
       });
+  }
+
+  getUsers () {
+    let token = localStorage.getItem("token");
+
+    let config ={
+      headers : {
+      Authorization : token
+    }
+    }
+    
+    axios.get("http://localhost:3000/users/list", config)
+    .then( result => {
+      if (result.data.success == true) {
+        this.usuarios = result.data.usuarios;
+      } else {
+        console.log(result.data.error);
+      }
+      
+    }).catch(error => {
+      console.log(error.message);
+    })
   }
 }
