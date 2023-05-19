@@ -15,7 +15,7 @@ export class EditThemesPage implements OnInit {
   private data = inject(DataService);
   private activatedRoute = inject(ActivatedRoute);
   private platform = inject(Platform);
-  usuario : any = {};
+  temas : any = {};
 
   constructor(private toastController: ToastController,
    private router: Router) {}
@@ -27,10 +27,10 @@ export class EditThemesPage implements OnInit {
     .then( result => {
       if (result.data.success == true) {
 
-        if( result.data.usuario != null){
-          this.usuario = result.data.usuario;
+        if( result.data.temas != null){
+          this.temas = result.data.temas;
         }else{
-          this.usuario = {};
+          this.temas = {};
         }
        
       } else {
@@ -50,21 +50,23 @@ export class EditThemesPage implements OnInit {
     
   }
 
-  saveUser(){
-    console.log("usuario", this.usuario);
+  saveThemes(){
+    console.log("Temas", this.temas);
     var data = {
-      id : this.usuario.id,
-      name: this.usuario.name,
-      last_name: this.usuario.last_name,
-      email: this.usuario.email
+      id : this.temas.id,
+      create_date: this.temas.create_date,
+      name: this.temas.name,
+      description: this.temas.description,
+      keywords: this.temas.keywords,
+     
 
     }
 
     axios.post("http://localhost:3000/themes/update" , data)
     .then(  async result => {
       if (result.data.success == true) {
-        this.presentToats ("Usuario Guardado!!!");
-          this.router.navigate(["/home"]);
+        this.presentToats ("Tema Guardado!!!");
+          this.router.navigate(["/themes"]);
       } else {
         this.presentToats (result.data.error );
         
