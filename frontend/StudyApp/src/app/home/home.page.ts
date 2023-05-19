@@ -4,6 +4,7 @@ import axios from 'axios';
 import { MessageComponent } from '../message/message.component';
 
 import { DataService, Message } from '../services/data.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -15,7 +16,7 @@ export class HomePage implements OnInit{
 
   usuarios : any = [];
 
-  constructor() {
+  constructor(private router: Router) {
     
   }
 
@@ -30,6 +31,18 @@ export class HomePage implements OnInit{
   }
   
   ionViewWillEnter(): void {
+
+    
+
+     // verificar si es que mi el usuario no esta logeado
+     let token = localStorage.getItem("token");
+
+
+     
+     if(!token){
+       this.router.navigate(["/login"]);
+       return;
+     }
     this.getUsers();
   }
 
@@ -38,7 +51,15 @@ export class HomePage implements OnInit{
   }
 
   getUsers () {
-    axios.get("http://localhost:3000/users/list")
+    let token = localStorage.getItem("token");
+
+    let config ={
+      headers : {
+      "Authorization" : token
+    }
+    }
+    
+    axios.get("http://localhost:3000/users/list", config)
     .then( result => {
       if (result.data.success == true) {
         this.usuarios = result.data.usuarios;

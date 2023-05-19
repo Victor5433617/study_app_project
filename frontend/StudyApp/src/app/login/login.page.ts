@@ -42,6 +42,16 @@ export class LoginPage implements OnInit {
     })
   }
 
+  ionViewWillEnter(): void {
+    // verificar si es que mi el usuario esta logeado
+    let token = localStorage.getItem("token");
+
+    localStorage.removeItem("token");
+    if(token){
+      this.router.navigate(["/home"]);
+    }
+  }
+
   getBackButtonText() {
     const isIos = this.platform.is('ios')
     return isIos ? 'Inbox' : '';
