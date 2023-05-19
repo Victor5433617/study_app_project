@@ -3,6 +3,7 @@ const {UserModel} = require("../../model/user.model");
 const UserService = require('../../service/users.service');
 const jwt = require ('jsonwebtoken');
 
+
 const listarController = async function(req, res) {
     console.log("listar usuarios controller");
     try {
@@ -148,7 +149,7 @@ const login = async function (req, res){
 
 const logout = async function (res, res){
     try {
-        const userDB = await sequelize.query("UPDATE users SET token = null WHERE id =  " + res.locals.userId + " " );
+        const userDB = await sequelize.query("UPDATE users SET token = null WHERE id =  " +  res.locals.userId + " " );
 
         res.json({
             success: true
@@ -161,6 +162,7 @@ const logout = async function (res, res){
         })
     }
 }
+
 module.exports = {
     listarController, busquedaPorCodigo: consultarPorCodigo, actualizar, eliminar, login, logout
 };
