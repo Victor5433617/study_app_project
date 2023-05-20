@@ -36,14 +36,31 @@ const routes: Routes = [
       ),
   },
   {
+    path: 'topico-list',
+    loadChildren: () =>
+      import('./topico-list/topico-list.module').then(
+        (m) => m.TopicoListPageModule
+      ),
+  },
+  {
     path: 'login',
     loadChildren: () => import('./login/login.module').then( m => m.LoginPageModule)
   },
+
+  
+
   {
     path: 'theme-edit/:id',
     loadChildren: () =>
       import('./theme-edit/theme-edit.module').then(
         (m) => m.ThemeEditPageModule
+      ),
+  },
+  {
+    path: 'topico-edit/:id',
+    loadChildren: () =>
+      import('./topic-edit/topico-edit.module').then(
+        (m) => m.TopicoEditPageModule
       ),
   },
   {

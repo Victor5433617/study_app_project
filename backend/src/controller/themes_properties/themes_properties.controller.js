@@ -1,100 +1,128 @@
 const { sequelize } = require("../../connection");
-const { ThemesPropertiesModel } = require("../../model/themes_properties.model");
-const ThemesPropertiesService = require('../../service/themes_properties.service');
-
+const {
+  ThemesPropertiesModel,
+} = require("../../model/themes_properties.model");
+const themesPropertiesService = require("../../service/themes_properties.service");
 
 const listar = async function (req, res) {
-    console.log("listar temas/propiedades");
-    try {
-        const themes_properties = await ThemesPropertiesService.listar(req.query.filtro || '');
-        if (themes_properties) {
-           
-            res.json({
-                success: true,
-                temas_propiedades: themes_properties
-            });
-        } else {
-            res.json({
-                success: true,
-                temas_propiedades: []
-            });
-        }
-    } catch (error) {
-        console.log(error);
-        res.json({
-            success: false,
-            error: error.message
-        });
+  console.log("listar propiedades de temas controller");
+  try {
+    const themes_properties = await themesPropertiesService.listar(
+      req.query.filtro || ""
+    );
+    if (themes_properties) {
+      res.json({
+        success: true,
+        themes_properties: themes_properties,
+      });
+    } else {
+      res.json({
+        success: true,
+        themes_properties: [],
+      });
     }
-}; 
+  } catch (error) {
+    console.log(error);
+    res.json({
+      success: false,
+      error: error.message,
+    });
+  }
+};
 
 const consultarPorCodigo = async function (req, res) {
-    console.log("consultar 1 tema/propiedad por codigo");
-    try {
-        const themes_propertiesModelResult = await ThemesPropertiesService.consultarPorCodigo(req.params.id);
-        if (themes_propertiesModelResult) {
-            res.json({
-                success: true,
-                temas_propiedades: themes_propertiesModelResult
-            });
-        } else {
-            res.json({
-                success: true,
-                temas_propiedades: null
-            });
-        }
-    } catch (error) {
-        console.log(error);
-        res.json({
-            success: false,
-            error: error.message
-        });
+  console.log("consultar 1 propiedad de tema por codigo controller");
+  try {
+    const themesPropertiesModelResult =
+      await themesPropertiesService.busquedaPorCodigo(req.params.filtro || "");
+    if (themesPropertiesModelResult) {
+      res.json({
+        success: true,
+        themes_properties: themesPropertiesModelResult,
+      });
+    } else {
+      res.json({
+        success: true,
+        themes_properties: [],
+      });
     }
-}; 
+  } catch (error) {
+    console.log(error);
+    res.json({
+      success: false,
+      error: error.message,
+    });
+  }
+};
+
+const consultarPorCodigoTheme = async function (req, res) {
+  console.log("consultar 1 propiedad de tema por codigo del tema controller");
+  try {
+    const themesPropertiesModelResult =
+      await themesPropertiesService.consultarPorCodigoTheme(req.params.filtro || "");
+    if (themesPropertiesModelResult) {
+      res.json({
+        success: true,
+        themes_properties: themesPropertiesModelResult,
+      });
+    } else {
+      res.json({
+        success: true,
+        themes_properties: [],
+      });
+    }
+  } catch (error) {
+    console.log(error);
+    res.json({
+      success: false,
+      error: error.message,
+    });
+  }
+};
 
 const actualizar = async function (req, res) {
-    console.log("actualizar temas propiedades");
-    let tema_propiedadRetorno = null; 
-    try {
-        let tema_propiedadRetorno = await ThemesPropertiesService.actualizar(
-            req.body.id,
-            req.body.theme_id,
-            req.body.property_name,
-            req.body.property_value
-        );
-
-        res.json({
-            success: true,
-            themes_properties: tema_propiedadRetorno
-        });
-    } catch (error) {
-        console.log(error);
-        res.json({
-            success: false,
-            error: error.message
-        });
-    }
-}; 
-
-
+  console.log("actualizar propiedad de tema controller");
+  let themesPropertiesReturn = null;
+  try {
+    themesPropertiesReturn = await themesPropertiesService.actualizar(
+      req.body.id,
+      req.body.theme_id,
+      req.body.property_name,
+      req.body.property_value
+    );
+    res.json({
+      success: true,
+      themes_properties: themesPropertiesReturn,
+    });
+  } catch (error) {
+    console.log(error);
+    res.json({
+      success: false,
+      error: error.message,
+    });
+  }
+};
 
 const eliminar = async function (req, res) {
-    console.log("eliminar temas propiedades");
-   
-    try {
-        const tema_propiedadRetorno =  await ThemesPropertiesService.eliminar(req.params.id);
-        res.json({
-            success: tema_propiedadRetorno,
-        });
+  console.log("eliminar propiedad de tema controller");
+  try {
+    await themesPropertiesService.eliminar(req.params.filtro || "");
+    res.json({
+      success: true,
+    });
+  } catch (error) {
+    console.log(error);
+    res.json({
+      success: false,
+      error: error.message,
+    });
+  }
+};
 
-    } catch (error) {
-        console.log(error);
-        res.json({
-            success: false,
-            error: error.message
-        });
-    }
-}; 
 module.exports = {
-    listar, consultarPorCodigo, actualizar, eliminar
+  listar,
+  busquedaPorCodigo: consultarPorCodigo,
+  actualizar,
+  eliminar,
+  consultarPorCodigoTheme
 };

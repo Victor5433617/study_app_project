@@ -38,6 +38,10 @@
         <ion-icon name="person-circle-outline"></ion-icon>
         Usuarios
       </ion-tab-button>
+      <ion-tab-button [routerLink]="'/topico-list'">
+        <ion-icon name="folder-open-outline"></ion-icon>
+        Topicos
+      </ion-tab-button>
     </ion-tab-bar>
   </ion-tabs>
   <ion-card>
@@ -60,9 +64,7 @@
 
    <!-- Contenido -->
    <ion-card>
-    <ion-card-header>
-      <ion-card-title>Topicos:</ion-card-title>
-    </ion-card-header>
+    
 
     <ion-card-content>
       <p>Aquí puedes agregar el contenido relacionado con el tema seleccionado.</p>

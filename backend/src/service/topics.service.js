@@ -1,52 +1,54 @@
 const { sequelize } = require("../connection");
 const { TopicsModel } = require("../model/topics.model");
 
-///cuando se trata de listar es mejor usar SQL puro por cuestion de tiempo
 const listar = async function (textoBuscar) {
-
-    console.log("listar topicos");
-
-    try {
-        const topics = await sequelize.query(`SELECT * 
-        FROM topics
-        WHERE 1=1 
-        AND UPPER (name) LIKE UPPER ('%${textoBuscar}%')
-        ORDER BY id`);
-
-        if (topics && topics[0]) {
-            // en users[0] se encuentra el listado de lo que se recupera desde el sql
-            return topics[0];
-        } else {
-            return [];
-
-        }
-    } catch (error) {
-        console.log(error);
-        throw error;
+  console.log("listar topicos");
+  try {
+    const topics = await sequelize.query(`SELECT * 
+      FROM topics
+      WHERE 1=1
+        AND UPPER(name) LIKE UPPER('%${textoBuscar}%')
+      ORDER BY id`);
+    if (topics && topics[0]) {
+      return topics[0];
+    } else {
+      return [];
     }
-
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
 };
 
-const consultarPorCodigo = async function (id) {
-    console.log("consultar 1 topico por codigo");
-
-    try {
-        const topicsModelResult = await TopicsModel.findByPk(id);
-
-        if (topicsModelResult) {
-            return topicsModelResult;
-        } else {
-            return null;
-
-        }
-    } catch (error) {
-        console.log(error);
-        throw error;
+const consultarPorCodigo = async function (codigo) {
+  console.log("consultar 1 topico por codigo");
+  try {
+    const topicsModelResult = await TopicsModel.findByPk(codigo);
+    if (topicsModelResult) {
+      return topicsModelResult;
+    } else {
+      return [];
     }
-
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
 };
 
 const actualizar = async function (
+  id,
+  create_date,
+  name,
+  topic_id,
+  order,
+  priority,
+  color,
+  owner_user_id
+) {
+  console.log("actualizar topicos");
+
+  let topicsReturn = null;
+  const data = {
     id,
     create_date,
     name,
@@ -54,56 +56,44 @@ const actualizar = async function (
     order,
     priority,
     color,
-    owner_user_id
-) {
-    console.log("actualizar topicos");
-    
-    let topicoRetorno = null; //guarda el topico que se va incluir o editar;
-    const data = {
-        id,
-        create_date,
-        name,
-        topic_id,
-        order,
-        priority,
-        color,
-        owner_user_id
-    };
+    owner_user_id,
+  };
 
-    try {
-        let topicoExiste = null;
-        if (id) {
-            topicoExiste = await TopicsModel.findByPk(id);
-        }
-        if (topicoExiste) {
-            topicoRetorno = await TopicsModel.update(data, { where: { id: id } });
-            topicoRetorno = data;
-        } else {
-            topicoRetorno = await TopicsModel.create(data);
-
-        }
-        return topicoRetorno;
-    } catch (error) {
-        console.log(error);
-        throw error;
+  try {
+    let topicsExist = null;
+    if (id) {
+      topicsExist = await TopicsModel.findByPk(id);
     }
+    if (topicsExist) {
+      topicsReturn = await TopicsModel.update(data, { where: { id: id } });
+      topicsReturn = data;
+    } else {
+      topicsReturn = await TopicsModel.create(data);
+    }
+    return topicsReturn;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
 };
 
-const eliminar = async function (id) {
-    console.log("eliminar topicos");
-
-    try {
-        await TopicsModel.destroy({ where: { id: id } });
-        return true;
-    } catch (error) {
-
-        console.log(error);
-        throw error;
-
-
-    }
+const eliminar = async function (codigo) {
+  console.log("eliminar topicos");
+  try {
+    //pide tb poner topic_id (??)
+    TopicsModel.destroy(
+      { where: { id: codigo } },
+      { truncate: false }
+    );
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
 };
 
 module.exports = {
-    listar, consultarPorCodigo, actualizar, eliminar
+  listar,
+  busquedaPorCodigo: consultarPorCodigo,
+  actualizar,
+  eliminar,
 };

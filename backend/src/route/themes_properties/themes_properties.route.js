@@ -1,9 +1,9 @@
-const themes_propertiesController = require('../../controller/themes_properties/themes_properties.controller');
+const themesPropertiesController = require('../../controller/themes_properties/themes_properties.controller')
 
-module.exports = function (app){
-    
-    app.get("/themes_properties/list", themes_propertiesController.listar);
-    app.get("/themes_properties/:id", themes_propertiesController.consultarPorCodigo);
-    app.post("/themes_properties/update", themes_propertiesController.actualizar);
-   app.delete("/themes_properties/delete/:id", themes_propertiesController.eliminar);
+module.exports = function(app){
+    app.get("/themes_properties/list", themesPropertiesController.listar);
+    app.get("/themes_properties/buscarPorCodigo/:filtro", themesPropertiesController.busquedaPorCodigo);
+    app.get("/themes_properties/buscarPorTema/:filtro", themesPropertiesController.consultarPorCodigoTheme);
+    app.post("/themes_properties/update", themesPropertiesController.actualizar);
+    app.delete("/themes_properties/delete/:filtro", themesPropertiesController.eliminar);
 }
